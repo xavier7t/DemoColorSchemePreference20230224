@@ -8,14 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("colorScheme") var selectedColorScheme: String = "system"
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                Section("Appearance") {
+                    Picker(selection: $selectedColorScheme, label: Text("Color Scheme")) {
+                        Text("System").tag("system")
+                        Text("Light").tag("light")
+                        Text("Dark").tag("dark")
+                    }
+                    .pickerStyle(.segmented)
+                    .preferredColorScheme(getPreferredColorScheme())
+                }
+            }
+            .navigationTitle("Settings")
         }
-        .padding()
+    }
+    
+    private func getPreferredColorScheme() -> ColorScheme? {
+        switch selectedColorScheme {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return nil
+        }
     }
 }
 
